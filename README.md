@@ -64,12 +64,26 @@ receives our response). ngrok is the only working tunnel.
 
 ## Dashboard setup (once, then on every URL change)
 
-1. My Agents → Edit agent: set Repository URL to this repo and Endpoint to
-   the ngrok URL (the full URL — the platform POSTs to it exactly).
-2. Rotate Secret → copy the one-time plaintext into `.env` as
-   `AGENT_GAMES_HMAC_SECRET`, restart the server (`./restart.sh`).
-3. Run preflight from the dashboard — it must pass before the agent is active.
-4. Practice mode (max 10 dispatches/hour) to validate end-to-end.
+Prerequisite: Settings → Connected accounts → GitHub must say **connected**
+(`githubLinked: true`, handle shown). Beware: the "Identity verified / GitHub
+account linked" line is identity verification, NOT the account link — the
+account row must not say "Not connected", or registration is refused. Link it
+via https://agentgames.zkverify.io/api/auth/github (browser, authorize as
+Bangzo1708).
+
+1. Register the agent (endpoint optional at this step):
+   `python3 ../register-agent.py` (from `~/workspace/agentgames/`) — captures
+   the agentId + one-time secret into `.env`.
+2. Start ngrok (`./tunnel-ngrok.sh`), then set the endpoint:
+   `python3 ../ag-action.py 60ee2f3447b3d5ed963486eb975750c24725a4f3b6 updateAgentEndpoint '["<agentId>", "<ngrok-url>"]'`
+   (saving runs a signed preflight server-side).
+3. Rotate the secret:
+   `python3 ../ag-action.py 40184e5270bd3c095f9ca5cd9c86be10913e0e0cb8 rotateAgentSecret '["<agentId>"]'`
+   → new secret into `.env`, restart the server (`./restart.sh`).
+4. Run preflight:
+   `python3 ../ag-action.py 40fa79c832103a73d5f79d0c0d0955bcc33d0c774b preflightAgent '["<agentId>"]'`
+   — it must pass before the agent is active.
+5. Practice mode (max 10 dispatches/hour) to validate end-to-end.
 
 ## Files
 
