@@ -1,0 +1,1 @@
+{"dependencies":{"circomlibjs":"^0.1.7","js-sha3":"^0.14.0","snarkjs":"^0.7.6"},"description":"Proof Gatekeeper agent for Agent Games (zkVerify) — handle safari82","engines":{"node":">=18"},"main":"src/server.mjs","name":"agent-games-gatekeeper","scripts":{"start":"node src/server.mjs","test":"node test/harness.mjs"},"type":"module","version":"1.0.0"}
